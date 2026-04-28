@@ -4,7 +4,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage'
 const AppContext = createContext(null)
 
 function getDefaultStartDate() {
-  return new Date().toISOString().split('T')[0]
+  return '2026-05-04'
 }
 
 function computeCurrentWeek(startDate) {
@@ -16,14 +16,14 @@ function computeCurrentWeek(startDate) {
   today.setHours(0, 0, 0, 0)
   const diffMs = today - start
   const week = Math.ceil(diffMs / (7 * 24 * 60 * 60 * 1000)) + 1
-  return Math.min(Math.max(week, 1), 26)
+  return Math.min(Math.max(week, 1), 33)
 }
 
 function computeCurrentPhase(week) {
-  if (week >= 1 && week <= 7) return 'Phase 1 — Base Building'
-  if (week >= 8 && week <= 18) return 'Phase 2 — Build & Race Prep'
-  if (week >= 19 && week <= 22) return 'Taper & Race'
-  if (week >= 23 && week <= 26) return 'Phase 4 — Hyrox Prep'
+  if (week >= 1 && week <= 8) return 'Phase 1 — Base Building'
+  if (week >= 9 && week <= 20) return 'Phase 2 — Marathon Build'
+  if (week >= 21 && week <= 26) return 'Taper & Race'
+  if (week >= 27 && week <= 33) return 'Recovery & Hyrox Prep'
   return 'Unknown'
 }
 

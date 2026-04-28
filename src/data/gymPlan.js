@@ -3,7 +3,7 @@ export const GYM_PLAN = {
     {
       id: 'phase1',
       label: 'Phase 1',
-      weeks: [1, 7],
+      weeks: [1, 8],
       sessions: [
         {
           id: 'A',
@@ -120,7 +120,7 @@ export const GYM_PLAN = {
     {
       id: 'phase2',
       label: 'Phase 2',
-      weeks: [8, 18],
+      weeks: [9, 20],
       sessions: [
         {
           id: 'A',
@@ -237,7 +237,7 @@ export const GYM_PLAN = {
     {
       id: 'phase4',
       label: 'Phase 4 — Hyrox Prep',
-      weeks: [23, 26],
+      weeks: [27, 33],
       sessions: [
         {
           id: 'A',

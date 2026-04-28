@@ -13,22 +13,22 @@ const SESSION_TYPE_BADGE = {
 
 const PHASE_COLORS = {
   'Phase 1 — Base Building': 'bg-blue-50 border-blue-200 text-blue-800',
-  'Phase 2 — Build & Race Prep': 'bg-green-50 border-green-200 text-green-800',
+  'Phase 2 — Marathon Build': 'bg-green-50 border-green-200 text-green-800',
   'Taper & Race': 'bg-purple-50 border-purple-200 text-purple-800',
-  'Phase 4 — Hyrox Prep': 'bg-orange-50 border-orange-200 text-orange-800',
+  'Recovery & Hyrox Prep': 'bg-orange-50 border-orange-200 text-orange-800',
 }
 
 const CHECKPOINTS = [
-  { id: '10k', name: '10K Time Trial', target: 'sub-40:00', week: 11 },
-  { id: 'halfmarathon', name: 'Half Marathon', target: 'sub-1:23:00', week: 16 },
-  { id: 'marathon', name: 'Auckland Marathon', target: 'sub-3:00:00', week: 22 },
-  { id: 'hyrox', name: 'Hyrox December', target: 'sub-1:05:00', week: 26 },
+  { id: '10k', name: '10K Time Trial', target: 'sub-40:00', week: 12 },
+  { id: 'halfmarathon', name: 'Half Marathon', target: 'sub-1:23:00', week: 17 },
+  { id: 'marathon', name: 'Auckland Marathon', target: 'sub-3:00:00', week: 26 },
+  { id: 'hyrox', name: 'Hyrox December', target: 'sub-1:05:00', week: 33 },
 ]
 
 function getGymPhaseId(week) {
-  if (week >= 1 && week <= 7) return 'phase1'
-  if (week >= 8 && week <= 18) return 'phase2'
-  if (week >= 23 && week <= 26) return 'phase4'
+  if (week >= 1 && week <= 8) return 'phase1'
+  if (week >= 9 && week <= 20) return 'phase2'
+  if (week >= 27 && week <= 33) return 'phase4'
   return null
 }
 
@@ -73,7 +73,7 @@ export default function Dashboard() {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h1 className="text-xl font-bold text-gray-900">George's Training Hub</h1>
-          <p className="text-sm text-gray-500">Your 26-week plan</p>
+          <p className="text-sm text-gray-500">Your 33-week plan</p>
         </div>
         <button
           onClick={() => navigate('/settings')}
@@ -91,7 +91,7 @@ export default function Dashboard() {
       <div className="flex gap-3 mb-4">
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 flex-1 text-center">
           <div className="text-2xl font-bold text-gray-900">Week {currentWeek}</div>
-          <div className="text-xs text-gray-500">of 26</div>
+          <div className="text-xs text-gray-500">of 33</div>
         </div>
         <div className={`rounded-xl border p-3 flex-2 flex items-center px-4 ${phaseColorClass}`}>
           <span className="text-sm font-semibold">{currentPhase}</span>

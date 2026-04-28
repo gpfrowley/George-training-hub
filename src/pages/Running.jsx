@@ -207,7 +207,7 @@ export default function Running() {
   const sessions = weekData ? weekData.sessions : []
 
   const prevWeek = () => setSelectedWeek(w => Math.max(1, w - 1))
-  const nextWeek = () => setSelectedWeek(w => Math.min(26, w + 1))
+  const nextWeek = () => setSelectedWeek(w => Math.min(33, w + 1))
 
   return (
     <div className="max-w-lg mx-auto px-4 py-4 pb-20">
@@ -233,7 +233,7 @@ export default function Running() {
         </div>
         <button
           onClick={nextWeek}
-          disabled={selectedWeek === 26}
+          disabled={selectedWeek === 33}
           className="p-1 rounded-lg disabled:opacity-30 hover:bg-gray-100 transition-colors"
           aria-label="Next week"
         >

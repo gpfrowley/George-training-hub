@@ -3,9 +3,9 @@ import { useApp } from '../context/AppContext'
 import { GYM_PLAN } from '../data/gymPlan'
 
 function getPhaseForWeek(week) {
-  if (week >= 1 && week <= 7) return GYM_PLAN.phases.find(p => p.id === 'phase1')
-  if (week >= 8 && week <= 18) return GYM_PLAN.phases.find(p => p.id === 'phase2')
-  if (week >= 23 && week <= 26) return GYM_PLAN.phases.find(p => p.id === 'phase4')
+  if (week >= 1 && week <= 8) return GYM_PLAN.phases.find(p => p.id === 'phase1')
+  if (week >= 9 && week <= 20) return GYM_PLAN.phases.find(p => p.id === 'phase2')
+  if (week >= 27 && week <= 33) return GYM_PLAN.phases.find(p => p.id === 'phase4')
   return null
 }
 
@@ -262,7 +262,7 @@ export default function Gym() {
   const phase = getPhaseForWeek(selectedWeek)
 
   const prevWeek = () => setSelectedWeek(w => Math.max(1, w - 1))
-  const nextWeek = () => setSelectedWeek(w => Math.min(26, w + 1))
+  const nextWeek = () => setSelectedWeek(w => Math.min(33, w + 1))
 
   return (
     <div className="max-w-lg mx-auto px-4 py-4 pb-20">
@@ -289,7 +289,7 @@ export default function Gym() {
         </div>
         <button
           onClick={nextWeek}
-          disabled={selectedWeek === 26}
+          disabled={selectedWeek === 33}
           className="p-1 rounded-lg disabled:opacity-30 hover:bg-gray-100 transition-colors"
           aria-label="Next week"
         >

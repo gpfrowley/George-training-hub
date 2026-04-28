@@ -7,8 +7,8 @@ const CHECKPOINTS_CONFIG = [
     name: '10K Time Trial',
     target: 'sub-40:00',
     targetSeconds: 40 * 60,
-    week: 11,
-    description: 'Week 11 quality session — time trial effort',
+    week: 12,
+    description: 'Week 12 quality session — time trial effort',
     format: 'mm:ss',
   },
   {
@@ -16,8 +16,8 @@ const CHECKPOINTS_CONFIG = [
     name: 'Half Marathon',
     target: 'sub-1:23:00',
     targetSeconds: 83 * 60,
-    week: 16,
-    description: 'Week 16 race — target 1:23:00',
+    week: 17,
+    description: 'Week 17 race — target 1:23:00',
     format: 'hh:mm:ss',
   },
   {
@@ -25,8 +25,8 @@ const CHECKPOINTS_CONFIG = [
     name: 'Auckland Marathon',
     target: 'sub-3:00:00',
     targetSeconds: 3 * 60 * 60,
-    week: 22,
-    description: 'Week 22 — main goal race',
+    week: 26,
+    description: 'Week 26 — 1 November 2026 — main goal race',
     format: 'hh:mm:ss',
   },
   {
@@ -34,8 +34,8 @@ const CHECKPOINTS_CONFIG = [
     name: 'Hyrox December 2026',
     target: 'sub-1:05:00',
     targetSeconds: 65 * 60,
-    week: 26,
-    description: 'Week 26 — Hyrox competition',
+    week: 33,
+    description: 'Week 33 — December 2026 — Hyrox competition',
     format: 'hh:mm:ss',
   },
 ]
