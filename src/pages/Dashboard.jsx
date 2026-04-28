@@ -22,7 +22,7 @@ const CHECKPOINTS = [
   { id: '10k', name: '10K Time Trial', target: 'sub-40:00', week: 12 },
   { id: 'halfmarathon', name: 'Half Marathon', target: 'sub-1:23:00', week: 17 },
   { id: 'marathon', name: 'Auckland Marathon', target: 'sub-3:00:00', week: 26 },
-  { id: 'hyrox', name: 'Hyrox December', target: 'sub-1:05:00', week: 33 },
+  { id: 'hyrox', name: 'Hyrox December', target: 'sub-1:05:00', week: 32 },
 ]
 
 function getGymPhaseId(week) {

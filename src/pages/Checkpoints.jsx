@@ -34,10 +34,22 @@ const CHECKPOINTS_CONFIG = [
     name: 'Hyrox December 2026',
     target: 'sub-1:05:00',
     targetSeconds: 65 * 60,
-    week: 33,
-    description: 'Week 33 — December 2026 — Hyrox competition',
+    week: 32,
+    description: 'Week 32 — 13–14 December 2026 — Hyrox competition',
     format: 'hh:mm:ss',
   },
+]
+
+const HYROX_STATIONS = [
+  { station: 'SkiErg 1000m',          target: '3:30–3:45' },
+  { station: 'Sled Push 50m',          target: '2:30–2:45' },
+  { station: 'Sled Pull 50m',          target: '2:15–2:30' },
+  { station: 'Burpee Broad Jumps 80m', target: '4:00–4:30' },
+  { station: 'Row 1000m',              target: '4:00–4:10' },
+  { station: 'Farmers Carry 200m',     target: '2:00–2:15' },
+  { station: 'Sandbag Lunges 100m',    target: '3:30–3:45' },
+  { station: 'Wall Balls 100 reps',    target: '5:00–5:30' },
+  { station: '1km Runs ×8',            target: '2:55–3:00/km each' },
 ]
 
 function parseTimeToSeconds(timeStr) {
@@ -172,6 +184,39 @@ export default function Checkpoints() {
           onSave={(data) => setCheckpoint(cp.id, data)}
         />
       ))}
+
+      {/* Hyrox station target splits */}
+      <div className="bg-white rounded-xl shadow-sm border border-orange-100 overflow-hidden mt-2">
+        <div className="bg-orange-50 border-b border-orange-100 px-4 py-3">
+          <h2 className="text-base font-bold text-orange-900">Hyrox Station Targets</h2>
+          <p className="text-xs text-orange-600 mt-0.5">13–14 December 2026 · Sub-1:05:00</p>
+        </div>
+        <div>
+          {HYROX_STATIONS.map((s, i) => (
+            <div
+              key={s.station}
+              className={`flex items-center justify-between px-4 py-3 ${i < HYROX_STATIONS.length - 1 ? 'border-b border-gray-50' : ''}`}
+            >
+              <span className="text-sm text-gray-800">{s.station}</span>
+              <span className="text-sm font-semibold text-orange-700 tabular-nums">{s.target}</span>
+            </div>
+          ))}
+        </div>
+        <div className="bg-gray-50 border-t border-gray-100 px-4 py-3">
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-semibold text-gray-700">Total station time</span>
+            <span className="text-sm font-bold text-gray-900">~27–30 min</span>
+          </div>
+          <div className="flex justify-between items-center mt-1">
+            <span className="text-sm text-gray-500">Running time (8×1km)</span>
+            <span className="text-sm font-semibold text-gray-700">~24–25 min</span>
+          </div>
+          <div className="flex justify-between items-center mt-1">
+            <span className="text-sm font-semibold text-gray-700">Projected total</span>
+            <span className="text-sm font-bold text-blue-700">~58–62 min</span>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

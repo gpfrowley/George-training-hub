@@ -2,6 +2,49 @@ import { useState } from 'react'
 import { useApp } from '../context/AppContext'
 import { RUNNING_PLAN } from '../data/runningPlan'
 
+const DAY_TYPE_STYLES = {
+  rest:    'bg-gray-100 text-gray-500',
+  easy:    'bg-blue-100 text-blue-700',
+  gym:     'bg-green-100 text-green-700',
+  quality: 'bg-emerald-100 text-emerald-800',
+  tempo:   'bg-amber-100 text-amber-700',
+  long:    'bg-red-100 text-red-700',
+  hyrox:   'bg-orange-100 text-orange-700',
+  race:    'bg-purple-100 text-purple-700',
+}
+
+function HyroxWeekView({ weekData }) {
+  return (
+    <div>
+      <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-4">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-xs font-bold text-orange-600 uppercase tracking-wide">Hyrox Block</span>
+          <span className="text-xs text-orange-500 font-medium">{weekData.dateRange}</span>
+        </div>
+        <p className="text-sm text-orange-800 font-medium">{weekData.focusNote}</p>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-4">
+        <div className="px-4 py-2 bg-gray-50 border-b border-gray-100">
+          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Weekly Schedule</span>
+        </div>
+        {weekData.dailySchedule.map((item, i) => (
+          <div
+            key={item.day}
+            className={`flex items-center gap-3 px-4 py-3 ${i < weekData.dailySchedule.length - 1 ? 'border-b border-gray-50' : ''}`}
+          >
+            <div className="w-10 shrink-0 text-xs font-bold text-gray-400">{item.day}</div>
+            <div className="flex-1 text-sm text-gray-800">{item.activity}</div>
+            <span className={`shrink-0 text-xs font-semibold px-2 py-0.5 rounded-full ${DAY_TYPE_STYLES[item.type] || 'bg-gray-100 text-gray-500'}`}>
+              {item.type}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 const SESSION_TYPE_BADGE = {
   easy: 'bg-blue-100 text-blue-700',
   quality: 'bg-green-100 text-green-700',
@@ -207,7 +250,7 @@ export default function Running() {
   const sessions = weekData ? weekData.sessions : []
 
   const prevWeek = () => setSelectedWeek(w => Math.max(1, w - 1))
-  const nextWeek = () => setSelectedWeek(w => Math.min(33, w + 1))
+  const nextWeek = () => setSelectedWeek(w => Math.min(32, w + 1))
 
   return (
     <div className="max-w-lg mx-auto px-4 py-4 pb-20">
@@ -233,7 +276,7 @@ export default function Running() {
         </div>
         <button
           onClick={nextWeek}
-          disabled={selectedWeek === 33}
+          disabled={selectedWeek === 32}
           className="p-1 rounded-lg disabled:opacity-30 hover:bg-gray-100 transition-colors"
           aria-label="Next week"
         >
@@ -243,7 +286,10 @@ export default function Running() {
         </button>
       </div>
 
-      {sessions.length === 0 ? (
+      {/* Hyrox block view for weeks 27–32 */}
+      {weekData?.hyrox ? (
+        <HyroxWeekView weekData={weekData} />
+      ) : sessions.length === 0 ? (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center text-gray-500">
           No sessions planned for this week.
         </div>
