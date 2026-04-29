@@ -11,12 +11,15 @@ function computeCurrentWeek(startDate) {
   if (!startDate) return 1
   const start = new Date(startDate)
   const today = new Date()
-  // Zero out time portions for accurate day difference
+  // Normalize to midnight so time-of-day doesn't affect the day count
   start.setHours(0, 0, 0, 0)
   today.setHours(0, 0, 0, 0)
   const diffMs = today - start
-  const week = Math.ceil(diffMs / (7 * 24 * 60 * 60 * 1000)) + 1
-  return Math.min(Math.max(week, 1), 33)
+  // Before the plan starts → always week 1
+  if (diffMs < 0) return 1
+  // floor so that days 0–6 = week 1, days 7–13 = week 2, etc.
+  const week = Math.floor(diffMs / (7 * 24 * 60 * 60 * 1000)) + 1
+  return Math.min(Math.max(week, 1), 32)
 }
 
 function computeCurrentPhase(week) {
