@@ -4,10 +4,19 @@ import { useApp } from '../context/AppContext'
 
 export default function Settings() {
   const navigate = useNavigate()
-  const { startDate, setStartDate, currentWeek } = useApp()
+  const { startDate, setStartDate, currentWeek, resetRunningLogs } = useApp()
   const [dateInput, setDateInput] = useState(startDate)
   const [saved, setSaved] = useState(false)
   const [importError, setImportError] = useState('')
+  const [confirmReset, setConfirmReset] = useState(false)
+  const [resetDone, setResetDone] = useState(false)
+
+  const handleResetRunning = () => {
+    resetRunningLogs()
+    setConfirmReset(false)
+    setResetDone(true)
+    setTimeout(() => setResetDone(false), 3000)
+  }
 
   const handleSaveDate = () => {
     setStartDate(dateInput)
@@ -128,6 +137,54 @@ export default function Settings() {
         </label>
         {importError && (
           <p className="text-sm text-red-600 mt-2">{importError}</p>
+        )}
+      </div>
+
+      {/* Danger zone */}
+      <div className="bg-white rounded-xl shadow-sm border border-red-100 p-4 mb-4">
+        <h2 className="text-sm font-semibold text-red-700 mb-1">Danger Zone</h2>
+        <p className="text-xs text-gray-400 mb-3">
+          Reset all running session logs back to pending. Gym logs, checkpoints, and body metrics are not affected.
+        </p>
+
+        {!confirmReset && !resetDone && (
+          <button
+            onClick={() => setConfirmReset(true)}
+            className="w-full border border-red-300 text-red-600 rounded-lg px-4 py-2 text-sm font-semibold hover:bg-red-50 transition-colors"
+          >
+            Reset All Running Data
+          </button>
+        )}
+
+        {confirmReset && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+            <p className="text-sm font-semibold text-red-800 mb-3">
+              This will permanently clear all logged running sessions. Are you sure?
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={handleResetRunning}
+                className="flex-1 bg-red-600 text-white rounded-lg px-4 py-2 text-sm font-semibold hover:bg-red-700 transition-colors"
+              >
+                Yes, reset running data
+              </button>
+              <button
+                onClick={() => setConfirmReset(false)}
+                className="flex-1 border border-gray-200 text-gray-600 rounded-lg px-4 py-2 text-sm font-semibold hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+
+        {resetDone && (
+          <div className="flex items-center gap-2 text-green-700 bg-green-50 border border-green-200 rounded-lg px-4 py-2">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+            <span className="text-sm font-medium">All running data cleared.</span>
+          </div>
         )}
       </div>
 
