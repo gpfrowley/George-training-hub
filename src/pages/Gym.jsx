@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useApp } from '../context/AppContext'
 import { GYM_PLAN } from '../data/gymPlan'
 
@@ -27,20 +27,22 @@ function ExerciseSetRow({ setIndex, set, onChange, onRemove }) {
   return (
     <div className="flex items-center gap-2 py-1">
       <span className="text-xs text-gray-500 w-6 text-center font-medium">{setIndex + 1}</span>
+      {/* type="text" + inputMode avoids browser number-input restrictions that
+          block typing mid-number (e.g. trailing ".", negative sign, focus jumps).
+          inputMode="numeric" / "decimal" still pops the right mobile keyboard. */}
       <input
-        type="number"
-        min="0"
+        type="text"
+        inputMode="numeric"
         placeholder="Reps"
-        value={set.reps || ''}
+        value={set.reps ?? ''}
         onChange={e => onChange({ ...set, reps: e.target.value })}
         className="flex-1 border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-center"
       />
       <input
-        type="number"
-        min="0"
-        step="0.5"
+        type="text"
+        inputMode="decimal"
         placeholder="kg"
-        value={set.weight || ''}
+        value={set.weight ?? ''}
         onChange={e => onChange({ ...set, weight: e.target.value })}
         className="flex-1 border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-center"
       />
@@ -58,24 +60,26 @@ function ExerciseSetRow({ setIndex, set, onChange, onRemove }) {
 }
 
 function ExerciseBlock({ exercise, exerciseSets, prevWeight, onSetsChange }) {
-  const addSet = () => {
-    onSetsChange([...(exerciseSets || []), { reps: '', weight: '' }])
-  }
-
-  const removeSet = (idx) => {
-    const updated = (exerciseSets || []).filter((_, i) => i !== idx)
-    onSetsChange(updated)
-  }
-
-  const updateSet = (idx, set) => {
-    const updated = (exerciseSets || []).map((s, i) => i === idx ? set : s)
-    onSetsChange(updated)
-  }
-
-  // Initialize default sets if needed
+  // `sets` is the source of truth for what's displayed — always has content
+  // (either saved data or freshly-initialised defaults). All mutators MUST
+  // operate on `sets`, never on the raw `exerciseSets` prop, because
+  // `exerciseSets` is undefined until the first edit, which would cause
+  // map/filter on [] and silently discard every keystroke.
   const sets = exerciseSets && exerciseSets.length > 0
     ? exerciseSets
     : Array.from({ length: exercise.defaultSets }, () => ({ reps: '', weight: '' }))
+
+  const addSet = () => {
+    onSetsChange([...sets, { reps: '', weight: '' }])
+  }
+
+  const removeSet = (idx) => {
+    onSetsChange(sets.filter((_, i) => i !== idx))
+  }
+
+  const updateSet = (idx, updatedSet) => {
+    onSetsChange(sets.map((s, i) => i === idx ? updatedSet : s))
+  }
 
   return (
     <div className="mb-3">
@@ -121,6 +125,15 @@ function SessionView({ session, week, phaseId, gymLogs, setGymLog }) {
   const [localExercises, setLocalExercises] = useState(log.exercises || {})
   const [notes, setNotes] = useState(log.notes || '')
   const [editing, setEditing] = useState(false)
+
+  // Re-sync local state whenever the user navigates to a different week or
+  // switches phase/session, so we always show the correct saved data.
+  useEffect(() => {
+    const currentLog = gymLogs[logKey] || {}
+    setLocalExercises(currentLog.exercises || {})
+    setNotes(currentLog.notes || '')
+    setEditing(false)
+  }, [logKey]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const isComplete = log.completed && !editing
 
