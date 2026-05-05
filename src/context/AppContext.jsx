@@ -10,27 +10,22 @@ function getDefaultStartDate() {
 function computeCurrentWeek(startDate) {
   if (!startDate) return 1
 
-  // Parse start date as LOCAL year/month/day to avoid the UTC-midnight
-  // parsing that `new Date('YYYY-MM-DD')` does, which combined with
-  // setHours() causes a timezone-dependent day-shift (e.g. UTC+12).
-  const [y, m, d] = startDate.split('-').map(Number)
-  const start = new Date(y, m - 1, d) // local midnight, no UTC shift
-
   const today = new Date()
-  today.setHours(0, 0, 0, 0) // local midnight
+  const start = new Date(startDate)
 
-  const diffMs = today - start
+  // Set both to midnight to avoid time-of-day issues
+  today.setHours(0, 0, 0, 0)
+  start.setHours(0, 0, 0, 0)
 
-  // Before the plan starts → always week 1
-  if (diffMs < 0) return 1
+  const daysDiff = Math.floor((today - start) / (1000 * 60 * 60 * 24))
 
-  // Number of complete days elapsed since start date
-  const daysDiff = Math.floor(diffMs / (24 * 60 * 60 * 1000))
+  // If before start date, show week 1
+  if (daysDiff < 0) return 1
 
-  // days 0–6 = week 1, days 7–13 = week 2, etc.
+  // Week 1 = days 0-6, Week 2 = days 7-13, etc.
   const week = Math.floor(daysDiff / 7) + 1
 
-  return Math.min(Math.max(week, 1), 32)
+  return Math.min(week, 32)
 }
 
 function computeCurrentPhase(week) {
