@@ -36,7 +36,7 @@ export default function Metrics() {
   }
 
   const prevWeek = () => setSelectedWeek(w => Math.max(1, w - 1))
-  const nextWeek = () => setSelectedWeek(w => Math.min(26, w + 1))
+  const nextWeek = () => setSelectedWeek(w => Math.min(21, w + 1))
 
   const weightData = metrics
     .filter(m => m.weight !== null && m.weight !== undefined)
@@ -70,7 +70,7 @@ export default function Metrics() {
         </div>
         <button
           onClick={nextWeek}
-          disabled={selectedWeek === 26}
+          disabled={selectedWeek === 21}
           className="p-1 rounded-lg disabled:opacity-30 hover:bg-gray-100 transition-colors"
           aria-label="Next week"
         >

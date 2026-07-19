@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { RUNNING_PLAN } from '../data/runningPlan'
+import { GYM_PLAN } from '../data/gymPlan'
 
 const SESSION_TYPE_BADGE = {
   easy: 'bg-blue-100 text-blue-700',
@@ -12,23 +13,26 @@ const SESSION_TYPE_BADGE = {
 }
 
 const PHASE_COLORS = {
-  'Phase 1 — Base Building': 'bg-blue-50 border-blue-200 text-blue-800',
-  'Phase 2 — Marathon Build': 'bg-green-50 border-green-200 text-green-800',
-  'Taper & Race': 'bg-purple-50 border-purple-200 text-purple-800',
-  'Recovery & Hyrox Prep': 'bg-orange-50 border-orange-200 text-orange-800',
+  'Phase 1 — Strength Foundation + Maintain Running': 'bg-blue-50 border-blue-200 text-blue-800',
+  'Phase 2 — HM Build + Hyrox Integration': 'bg-green-50 border-green-200 text-green-800',
+  'Phase 3 — Sharpen + Taper for Auckland HM': 'bg-purple-50 border-purple-200 text-purple-800',
+  'Phase 4 — Hyrox-Specific Peak Block': 'bg-orange-50 border-orange-200 text-orange-800',
+  'Phase 5 — Taper + Race (Hyrox Melbourne)': 'bg-red-50 border-red-200 text-red-800',
 }
 
 const CHECKPOINTS = [
-  { id: '10k', name: '10K Time Trial', target: 'sub-40:00', week: 12 },
-  { id: 'halfmarathon', name: 'Half Marathon', target: 'sub-1:23:00', week: 17 },
-  { id: 'marathon', name: 'Auckland Marathon', target: 'sub-3:00:00', week: 26 },
-  { id: 'hyrox', name: 'Hyrox December', target: 'sub-1:05:00', week: 32 },
+  { id: '10k', name: '10K Time Trial', target: 'sub-40:00', week: 9 },
+  { id: 'halfmarathon', name: 'Auckland Half Marathon', target: 'sub-1:22:00', week: 15 },
+  { id: 'hyroxsim', name: 'Hyrox Simulation', target: 'Log splits', week: 18 },
+  { id: 'hyrox', name: 'Hyrox Melbourne', target: 'sub-1:05:00', week: 21 },
 ]
 
 function getGymPhaseId(week) {
-  if (week >= 1 && week <= 8) return 'phase1'
-  if (week >= 9 && week <= 20) return 'phase2'
-  if (week >= 27 && week <= 33) return 'phase4'
+  if (week >= 1 && week <= 6) return 'phase1'
+  if (week >= 7 && week <= 11) return 'phase2'
+  if (week >= 12 && week <= 15) return 'phase3'
+  if (week >= 16 && week <= 20) return 'phase4'
+  if (week === 21) return 'phase5'
   return null
 }
 
@@ -52,7 +56,8 @@ export default function Dashboard() {
 
   // Gym sessions
   const gymPhaseId = getGymPhaseId(currentWeek)
-  const gymSessionIds = ['A', 'B', 'C']
+  const gymPhase = GYM_PLAN.phases.find(p => p.id === gymPhaseId)
+  const gymSessionIds = gymPhase ? gymPhase.sessions.map(s => s.id) : []
 
   // Checkpoint statuses
   const cpStatuses = CHECKPOINTS.map(cp => {
@@ -60,7 +65,7 @@ export default function Dashboard() {
     if (!log) return { ...cp, status: 'pending' }
     return {
       ...cp,
-      status: log.targetHit ? 'hit' : 'missed',
+      status: log.targetHit === null ? 'logged' : (log.targetHit ? 'hit' : 'missed'),
       time: log.time,
     }
   })
@@ -73,7 +78,7 @@ export default function Dashboard() {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h1 className="text-xl font-bold text-gray-900">George's Training Hub</h1>
-          <p className="text-sm text-gray-500">Your 33-week plan</p>
+          <p className="text-sm text-gray-500">Your 21-week plan</p>
         </div>
         <button
           onClick={() => navigate('/settings')}
@@ -91,7 +96,7 @@ export default function Dashboard() {
       <div className="flex gap-3 mb-4">
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-3 flex-1 text-center">
           <div className="text-2xl font-bold text-gray-900">Week {currentWeek}</div>
-          <div className="text-xs text-gray-500">of 33</div>
+          <div className="text-xs text-gray-500">of 21</div>
         </div>
         <div className={`rounded-xl border p-3 flex-2 flex items-center px-4 ${phaseColorClass}`}>
           <span className="text-sm font-semibold">{currentPhase}</span>
@@ -189,6 +194,9 @@ export default function Dashboard() {
               )}
               {cp.status === 'missed' && (
                 <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">Missed</span>
+              )}
+              {cp.status === 'logged' && (
+                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Logged</span>
               )}
             </div>
           </div>

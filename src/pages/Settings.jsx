@@ -87,7 +87,7 @@ export default function Settings() {
       {/* Start date */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-4">
         <h2 className="text-sm font-semibold text-gray-700 mb-1">Training Start Date</h2>
-        <p className="text-xs text-gray-400 mb-3">The date your 33-week plan started (default: 4 May 2026). This determines the current week.</p>
+        <p className="text-xs text-gray-400 mb-3">The date your 21-week plan started (default: 20 July 2026). This determines the current week.</p>
         <input
           type="date"
           value={dateInput}
@@ -106,7 +106,7 @@ export default function Settings() {
           )}
         </div>
         <div className="mt-3 text-sm text-gray-500">
-          Currently: <span className="font-semibold text-gray-800">Week {currentWeek} of 33</span>
+          Currently: <span className="font-semibold text-gray-800">Week {currentWeek} of 21</span>
         </div>
       </div>
 
@@ -191,7 +191,7 @@ export default function Settings() {
       {/* App info */}
       <div className="bg-gray-50 rounded-xl border border-gray-100 p-4 text-center">
         <div className="text-sm font-semibold text-gray-700">George's Training Hub</div>
-        <div className="text-xs text-gray-400 mt-1">33-week marathon + Hyrox training plan</div>
+        <div className="text-xs text-gray-400 mt-1">21-week Half Marathon + Hyrox Melbourne training plan</div>
         <div className="text-xs text-gray-300 mt-1">Data stored locally on this device</div>
       </div>
     </div>

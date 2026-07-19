@@ -4,7 +4,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage'
 const AppContext = createContext(null)
 
 function getDefaultStartDate() {
-  return '2026-05-04'
+  return '2026-07-20'
 }
 
 function computeCurrentWeek(startDate) {
@@ -25,14 +25,15 @@ function computeCurrentWeek(startDate) {
   // Week 1 = days 0-6, Week 2 = days 7-13, etc.
   const week = Math.floor(daysDiff / 7) + 1
 
-  return Math.min(week, 32)
+  return Math.min(week, 21)
 }
 
 function computeCurrentPhase(week) {
-  if (week >= 1 && week <= 8) return 'Phase 1 — Base Building'
-  if (week >= 9 && week <= 20) return 'Phase 2 — Marathon Build'
-  if (week >= 21 && week <= 26) return 'Taper & Race'
-  if (week >= 27 && week <= 33) return 'Recovery & Hyrox Prep'
+  if (week >= 1 && week <= 6) return 'Phase 1 — Strength Foundation + Maintain Running'
+  if (week >= 7 && week <= 11) return 'Phase 2 — HM Build + Hyrox Integration'
+  if (week >= 12 && week <= 15) return 'Phase 3 — Sharpen + Taper for Auckland HM'
+  if (week >= 16 && week <= 20) return 'Phase 4 — Hyrox-Specific Peak Block'
+  if (week === 21) return 'Phase 5 — Taper + Race (Hyrox Melbourne)'
   return 'Unknown'
 }
 

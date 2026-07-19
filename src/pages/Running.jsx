@@ -250,7 +250,7 @@ export default function Running() {
   const sessions = weekData ? weekData.sessions : []
 
   const prevWeek = () => setSelectedWeek(w => Math.max(1, w - 1))
-  const nextWeek = () => setSelectedWeek(w => Math.min(32, w + 1))
+  const nextWeek = () => setSelectedWeek(w => Math.min(21, w + 1))
 
   return (
     <div className="max-w-lg mx-auto px-4 py-4 pb-20">
@@ -276,7 +276,7 @@ export default function Running() {
         </div>
         <button
           onClick={nextWeek}
-          disabled={selectedWeek === 32}
+          disabled={selectedWeek === 21}
           className="p-1 rounded-lg disabled:opacity-30 hover:bg-gray-100 transition-colors"
           aria-label="Next week"
         >
@@ -286,7 +286,7 @@ export default function Running() {
         </button>
       </div>
 
-      {/* Hyrox block view for weeks 27–32 */}
+      {/* Hyrox block view for hyrox-format weeks (16–21) */}
       {weekData?.hyrox ? (
         <HyroxWeekView weekData={weekData} />
       ) : sessions.length === 0 ? (

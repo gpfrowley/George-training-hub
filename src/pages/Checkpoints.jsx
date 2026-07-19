@@ -7,35 +7,35 @@ const CHECKPOINTS_CONFIG = [
     name: '10K Time Trial',
     target: 'sub-40:00',
     targetSeconds: 40 * 60,
-    week: 12,
-    description: 'Week 12 quality session — time trial effort',
+    week: 9,
+    description: 'Week 9 — time trial effort',
     format: 'mm:ss',
   },
   {
     id: 'halfmarathon',
-    name: 'Half Marathon',
-    target: 'sub-1:23:00',
-    targetSeconds: 83 * 60,
-    week: 17,
-    description: 'Week 17 race — target 1:23:00',
+    name: 'Auckland Half Marathon',
+    target: 'sub-1:22:00',
+    targetSeconds: 82 * 60,
+    week: 15,
+    description: 'Week 15 — Sunday 1 November 2026 — supportive race, not primary goal',
     format: 'hh:mm:ss',
   },
   {
-    id: 'marathon',
-    name: 'Auckland Marathon',
-    target: 'sub-3:00:00',
-    targetSeconds: 3 * 60 * 60,
-    week: 26,
-    description: 'Week 26 — 1 November 2026 — main goal race',
+    id: 'hyroxsim',
+    name: 'Hyrox Simulation',
+    target: 'Log splits',
+    targetSeconds: null,
+    week: 18,
+    description: 'Week 18 — partial or full race simulation, no fixed target — log splits',
     format: 'hh:mm:ss',
   },
   {
     id: 'hyrox',
-    name: 'Hyrox December 2026',
+    name: 'Hyrox Melbourne',
     target: 'sub-1:05:00',
     targetSeconds: 65 * 60,
-    week: 32,
-    description: 'Week 32 — 13–14 December 2026 — Hyrox competition',
+    week: 21,
+    description: 'Week 21 — Thursday 10 December 2026 — primary goal race',
     format: 'hh:mm:ss',
   },
 ]
@@ -65,15 +65,20 @@ function CheckpointCard({ cp, log, onSave }) {
   const [form, setForm] = useState({ time: log?.time || '', notes: log?.notes || '' })
   const [editing, setEditing] = useState(false)
 
+  const hasTarget = cp.targetSeconds != null
   const isLogged = log && !editing
   const actualSecs = parseTimeToSeconds(log?.time)
-  const targetHit = actualSecs !== null && actualSecs < cp.targetSeconds
+  const targetHit = hasTarget && actualSecs !== null && actualSecs < cp.targetSeconds
 
   let statusBadge = null
   if (log) {
-    statusBadge = targetHit
-      ? <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">Target Hit!</span>
-      : <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700">Target Missed</span>
+    if (!hasTarget) {
+      statusBadge = <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">Logged</span>
+    } else {
+      statusBadge = targetHit
+        ? <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">Target Hit!</span>
+        : <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700">Target Missed</span>
+    }
   } else {
     statusBadge = <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-500">Pending</span>
   }
@@ -83,7 +88,7 @@ function CheckpointCard({ cp, log, onSave }) {
     onSave({
       time: form.time,
       notes: form.notes,
-      targetHit: secs !== null && secs < cp.targetSeconds,
+      targetHit: hasTarget ? (secs !== null && secs < cp.targetSeconds) : null,
       loggedAt: new Date().toISOString(),
     })
     setEditing(false)
@@ -91,7 +96,7 @@ function CheckpointCard({ cp, log, onSave }) {
 
   let borderClass = 'border-gray-100'
   if (log) {
-    borderClass = targetHit ? 'border-green-200' : 'border-red-200'
+    borderClass = !hasTarget ? 'border-blue-200' : (targetHit ? 'border-green-200' : 'border-red-200')
   }
 
   return (
@@ -188,8 +193,8 @@ export default function Checkpoints() {
       {/* Hyrox station target splits */}
       <div className="bg-white rounded-xl shadow-sm border border-orange-100 overflow-hidden mt-2">
         <div className="bg-orange-50 border-b border-orange-100 px-4 py-3">
-          <h2 className="text-base font-bold text-orange-900">Hyrox Station Targets</h2>
-          <p className="text-xs text-orange-600 mt-0.5">13–14 December 2026 · Sub-1:05:00</p>
+          <h2 className="text-base font-bold text-orange-900">Hyrox Melbourne Station Targets</h2>
+          <p className="text-xs text-orange-600 mt-0.5">Thursday 10 December 2026 · Sub-1:05:00</p>
         </div>
         <div>
           {HYROX_STATIONS.map((s, i) => (

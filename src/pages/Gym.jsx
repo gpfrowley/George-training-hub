@@ -3,9 +3,11 @@ import { useApp } from '../context/AppContext'
 import { GYM_PLAN } from '../data/gymPlan'
 
 function getPhaseForWeek(week) {
-  if (week >= 1 && week <= 8) return GYM_PLAN.phases.find(p => p.id === 'phase1')
-  if (week >= 9 && week <= 20) return GYM_PLAN.phases.find(p => p.id === 'phase2')
-  if (week >= 27 && week <= 33) return GYM_PLAN.phases.find(p => p.id === 'phase4')
+  if (week >= 1 && week <= 6) return GYM_PLAN.phases.find(p => p.id === 'phase1')
+  if (week >= 7 && week <= 11) return GYM_PLAN.phases.find(p => p.id === 'phase2')
+  if (week >= 12 && week <= 15) return GYM_PLAN.phases.find(p => p.id === 'phase3')
+  if (week >= 16 && week <= 20) return GYM_PLAN.phases.find(p => p.id === 'phase4')
+  if (week === 21) return GYM_PLAN.phases.find(p => p.id === 'phase5')
   return null
 }
 
@@ -275,7 +277,7 @@ export default function Gym() {
   const phase = getPhaseForWeek(selectedWeek)
 
   const prevWeek = () => setSelectedWeek(w => Math.max(1, w - 1))
-  const nextWeek = () => setSelectedWeek(w => Math.min(33, w + 1))
+  const nextWeek = () => setSelectedWeek(w => Math.min(21, w + 1))
 
   return (
     <div className="max-w-lg mx-auto px-4 py-4 pb-20">
@@ -302,7 +304,7 @@ export default function Gym() {
         </div>
         <button
           onClick={nextWeek}
-          disabled={selectedWeek === 33}
+          disabled={selectedWeek === 21}
           className="p-1 rounded-lg disabled:opacity-30 hover:bg-gray-100 transition-colors"
           aria-label="Next week"
         >
@@ -319,6 +321,12 @@ export default function Gym() {
         </div>
       ) : (
         <>
+          {phase.focusNote && (
+            <div className="bg-orange-50 border border-orange-200 rounded-xl p-3 mb-4 text-sm text-orange-800">
+              {phase.focusNote}
+            </div>
+          )}
+
           {/* Session tabs */}
           <div className="flex gap-2 mb-4">
             {phase.sessions.map(session => {
@@ -348,6 +356,9 @@ export default function Gym() {
             <div key={session.id}>
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-3">
                 <h2 className="text-base font-bold text-gray-900 mb-1">{session.label}</h2>
+                {session.restNote && (
+                  <p className="text-xs text-gray-500 italic mb-3">{session.restNote}</p>
+                )}
                 <SessionView
                   session={session}
                   week={selectedWeek}
