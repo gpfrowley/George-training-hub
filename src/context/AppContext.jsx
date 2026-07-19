@@ -68,6 +68,11 @@ export function AppProvider({ children }) {
     }))
   }, [setGymLogs])
 
+  // Clears ONLY gym logs — running, checkpoints and metrics are untouched
+  const resetGymLogs = useCallback(() => {
+    setGymLogs({})
+  }, [setGymLogs])
+
   const setCheckpoint = useCallback((id, data) => {
     setCheckpoints(prev => ({
       ...prev,
@@ -110,6 +115,7 @@ export function AppProvider({ children }) {
       resetRunningLogs,
       gymLogs,
       setGymLog,
+      resetGymLogs,
       checkpoints,
       setCheckpoint,
       metrics,
